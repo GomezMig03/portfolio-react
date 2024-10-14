@@ -42,7 +42,33 @@ const Header = () => {
         block: "start",
       });
     }
-  };
+  }
+
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    let original = window.scrollY
+    const handleScroll = () => {
+      const current = window.scrollY
+      const currentHeader = headerRef.current
+
+      if (!currentHeader) return
+
+      if (original > current) {
+        currentHeader.style.transform = "translateY(0)"
+      } else {
+        currentHeader.style.transform = "translateY(-200px)"
+      }
+
+      original = current
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  })
 
   return (
     <Box
@@ -55,6 +81,7 @@ const Header = () => {
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
+      ref={headerRef}
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
